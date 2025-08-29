@@ -1,0 +1,447 @@
+/* Root theme variables and palette */
+:root {
+  --bg-primary: #0f1222;
+  --bg-secondary: #171a2f;
+  --surface: #1f2442;
+  --text-primary: #f9fbff;
+  --text-muted: #b7c2d0;
+  --border: #2d3359;
+
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --blue: #3498db;
+  --yellow: #f1c40f;
+
+  --green-700: #1e9b53;
+  --red-700: #b03a2e;
+  --blue-700: #217dbb;
+  --yellow-700: #c29d0b;
+
+  --focus: #7d5fff;
+
+  --shadow-1: 0 6px 14px rgba(0,0,0,.25);
+  --shadow-2: 0 10px 24px rgba(0,0,0,.35);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 18px;
+  --trans-fast: 120ms ease;
+  --trans: 220ms ease;
+  --trans-slow: 420ms ease;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f5f7fb;
+  --bg-secondary: #ffffff;
+  --surface: #ffffff;
+  --text-primary: #13162b;
+  --text-muted: #515a6b;
+  --border: #e3e7ef;
+
+  --focus: #5a64ff;
+
+  --shadow-1: 0 4px 12px rgba(0,0,0,.08);
+  --shadow-2: 0 10px 24px rgba(0,0,0,.12);
+}
+
+html, body, #root, .App {
+  min-height: 100%;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 20% -10%, #2b2f55 0%, transparent 50%),
+              radial-gradient(900px 800px at 100% 10%, #2b2f55 0%, transparent 40%),
+              var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.ludo-app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+.main {
+  display: grid;
+  gap: 20px;
+  padding: 16px;
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  width: 100%;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: var(--shadow-1);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  box-shadow: var(--shadow-1);
+}
+
+.title {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Controls bar */
+.controls {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-1);
+}
+
+.select {
+  appearance: none;
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform var(--trans), box-shadow var(--trans);
+}
+.select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--focus) 30%, transparent);
+}
+
+.btn {
+  background: linear-gradient(135deg, #5a64ff, #8e2de2);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: transform var(--trans), box-shadow var(--trans), opacity var(--trans-fast);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.pill {
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+/* Board */
+.board-wrap {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: var(--shadow-1);
+}
+
+.board {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(300px 300px at 50% 50%, color-mix(in oklab, #ffffff 6%, transparent), transparent 70%),
+              var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+}
+.board .token {
+  /* Improve on-board token hit-area slightly */
+  padding: 2px;
+}
+
+/* Classic Ludo visual grid */
+.ludo-grid {
+  position: absolute;
+  inset: 0;
+}
+
+/* Home bases (four large squares) */
+.home-base {
+  position: absolute;
+  width: 34%;
+  height: 34%;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  box-shadow: inset 0 0 0 6px color-mix(in oklab, #ffffff 6%, transparent);
+}
+.home-green { top: 4%; left: 4%; background: color-mix(in oklab, var(--green) 25%, transparent); }
+.home-red { top: 4%; right: 4%; background: color-mix(in oklab, var(--red) 25%, transparent); }
+.home-blue { bottom: 4%; left: 4%; background: color-mix(in oklab, var(--blue) 25%, transparent); }
+.home-yellow { bottom: 4%; right: 4%; background: color-mix(in oklab, var(--yellow) 28%, transparent); }
+
+/* Cross paths */
+.path {
+  position: absolute;
+  background: color-mix(in oklab, #ffffff 8%, transparent);
+  border: 1px solid var(--border);
+}
+.path-vertical {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0; height: 100%;
+  width: 18%;
+  border-left: 2px solid var(--border);
+  border-right: 2px solid var(--border);
+}
+.path-horizontal {
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0; width: 100%;
+  height: 18%;
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+
+/* Lanes toward center (colored) */
+.lane {
+  position: absolute;
+  background: currentColor;
+  opacity: .25;
+}
+.lane-green { color: var(--green); top: 34%; left: 41%; width: 18%; height: 16%; }
+.lane-red { color: var(--red); top: 41%; right: 34%; width: 16%; height: 18%; }
+.lane-blue { color: var(--blue); bottom: 34%; left: 41%; width: 18%; height: 16%; }
+.lane-yellow { color: var(--yellow); top: 41%; left: 34%; width: 16%; height: 18%; }
+
+/* Center goal (four colored triangles) */
+.center-goal {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 28%;
+  height: 28%;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-1);
+}
+.center-triangle {
+  width: 100%; height: 100%;
+  clip-path: polygon(50% 50%, 0 0, 100% 0);
+}
+.center-triangle.green { background: linear-gradient(160deg, var(--green), var(--green-700)); grid-column: 1; grid-row: 1; clip-path: polygon(0 0, 100% 0, 50% 50%); }
+.center-triangle.red { background: linear-gradient(160deg, var(--red), var(--red-700)); grid-column: 2; grid-row: 1; clip-path: polygon(100% 0, 100% 100%, 50% 50%); }
+.center-triangle.blue { background: linear-gradient(160deg, var(--blue), var(--blue-700)); grid-column: 1; grid-row: 2; clip-path: polygon(0 100%, 0 0, 50% 50%); }
+.center-triangle.yellow { background: linear-gradient(160deg, var(--yellow), var(--yellow-700)); grid-column: 2; grid-row: 2; clip-path: polygon(100% 100%, 0 100%, 50% 50%); }
+
+/* Corner player areas */
+.corner {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.corner .corner-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.corner .coins {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 4px;
+}
+
+.corner .actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Dice slot in corner (explicit visible space) */
+.dice-slot {
+  display: grid;
+  place-items: center;
+  padding: 6px;
+  border-radius: 12px;
+  min-width: 60px;
+  border: 2px dashed var(--border);
+  background: color-mix(in oklab, #ffffff 4%, transparent);
+}
+.dice-slot-green { box-shadow: inset 0 0 0 3px color-mix(in oklab, var(--green) 35%, transparent); }
+.dice-slot-red { box-shadow: inset 0 0 0 3px color-mix(in oklab, var(--red) 35%, transparent); }
+.dice-slot-blue { box-shadow: inset 0 0 0 3px color-mix(in oklab, var(--blue) 35%, transparent); }
+.dice-slot-yellow { box-shadow: inset 0 0 0 3px color-mix(in oklab, var(--yellow) 45%, transparent); }
+
+/* Corner positions */
+.corner.tl { top: 10px; left: 10px; }
+.corner.tr { top: 10px; right: 10px; }
+.corner.bl { bottom: 10px; left: 10px; }
+.corner.br { bottom: 10px; right: 10px; }
+
+/* Tokens */
+.token {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.55);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: .5px;
+  box-shadow: var(--shadow-1);
+  transition: transform var(--trans), box-shadow var(--trans), outline var(--trans);
+  outline: 0 solid transparent;
+}
+.token:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+.token:focus {
+  outline: 3px solid color-mix(in oklab, var(--focus) 40%, transparent);
+}
+
+/* Token color variants */
+.token.green { background: linear-gradient(160deg, var(--green), var(--green-700)); }
+.token.red { background: linear-gradient(160deg, var(--red), var(--red-700)); }
+.token.blue { background: linear-gradient(160deg, var(--blue), var(--blue-700)); }
+.token.yellow { background: linear-gradient(160deg, var(--yellow), var(--yellow-700)); color: #111; border-color: rgba(0,0,0,.15); }
+
+.token.badge {
+  font-size: 10px;
+  opacity: .9;
+}
+
+/* Dice */
+.dice {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #ffffff, #dfe6f3);
+  color: #111;
+  border: 1px solid #cbd6ea;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  box-shadow: var(--shadow-1);
+  transition: transform var(--trans), box-shadow var(--trans);
+}
+[data-theme="dark"] .dice {
+  background: linear-gradient(145deg, #1f2442, #161a32);
+  color: #f6f8ff;
+  border: 1px solid var(--border);
+}
+
+.dice.rollable:hover {
+  transform: rotate(-3deg) translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+.dice:focus {
+  outline: 3px solid color-mix(in oklab, var(--focus) 40%, transparent);
+}
+
+/* Center path hint (visual only) */
+.center-mark {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 26%;
+  height: 26%;
+  border-radius: 18px;
+  border: 2px dashed var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Footer */
+.footer {
+  width: 100%;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .corner { width: 34%; height: 34%; }
+  .center-goal { width: 30%; height: 30%; }
+}
+@media (max-width: 860px) {
+  .header-inner { padding: 12px; }
+  .main { padding: 12px; }
+  .board-wrap { padding: 8px; }
+  .corner { width: 35%; height: 35%; }
+}
+@media (max-width: 620px) {
+  .title { font-size: 18px; }
+  .subtitle { display: none; }
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .corner { width: 40%; height: 40%; padding: 8px; }
+  .dice { width: 40px; height: 40px; }
+}
