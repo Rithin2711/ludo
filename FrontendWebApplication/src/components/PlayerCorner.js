@@ -45,6 +45,8 @@ export default function PlayerCorner({
           aria-label={`${name} dice area`}
           role="group"
         >
+          {/* Dice is allowed to roll only if it's this player's turn.
+              App will further prevent rolling if a pending move exists. */}
           <Dice value={diceValue} onRoll={() => onRoll(id)} disabled={!isActive} />
         </div>
         <span className="pill" aria-live="polite">

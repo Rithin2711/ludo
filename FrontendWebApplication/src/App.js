@@ -13,7 +13,7 @@ import { initialCoinsState } from './lib/state';
  * Provides:
  * - Theme toggle
  * - Player count selection (2–4)
- * - Minimal demo logic: turn rotation and dice roll
+ * - Turn-based flow: roll dice, then move one of your coins by the rolled value
  * - Renders Board with coins and dice at corners
  */
 
@@ -28,7 +28,7 @@ function App() {
   // PUBLIC_INTERFACE
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
 
-  /** Game demo state (no backend) */
+  /** Game state (frontend demo only) */
   const [playerCount, setPlayerCount] = useState(4);
   const players = useMemo(() => defaultPlayers.slice(0, playerCount), [playerCount]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
@@ -37,47 +37,95 @@ function App() {
   );
   const [coins, setCoins] = useState(() => initialCoinsState(players));
 
+  /**
+   * pendingMove tracks the requirement that the active player must move one coin
+   * after rolling. When null, it means no pending move (either before roll or after move).
+   * { playerIdx: number, value: number }
+   */
+  const [pendingMove, setPendingMove] = useState(null);
+
   useEffect(() => {
     // Reset state when player count changes
     setCurrentPlayer(0);
     setDiceValues(players.map(() => 1));
     setCoins(initialCoinsState(players));
+    setPendingMove(null);
   }, [players.length]);
 
   const rollDice = (playerIdx) => {
+    // Disallow rolling if it is not this player's turn or a move is pending
+    if (playerIdx !== currentPlayer || pendingMove) return;
+
     const value = Math.floor(Math.random() * 6) + 1;
     setDiceValues((prev) => {
       const next = [...prev];
       next[playerIdx] = value;
       return next;
     });
-    // Minimal movement demo: toggle first coin between yard and start path cell
-    setCoins((prev) => {
-      const next = structuredClone(prev);
-      const pl = next[playerIdx];
-      if (!pl) return prev;
-      const coin = pl.coins[0];
-      if (!coin) return prev;
-      // Toggle demo positions
-      coin.position = coin.position === 'yard' ? 'start' : 'yard';
-      return next;
-    });
-    // advance turn
+
+    // After roll, require this player to choose a coin to move by "value"
+    setPendingMove({ playerIdx, value });
+  };
+
+  const advanceTurn = () => {
     setCurrentPlayer((idx) => nextPlayerIndex(idx, players.length));
   };
 
-  const onMoveCoin = (playerIdx, coinIdx) => {
-    // Demo: cycle coin position through yard -> start -> mid -> yard
+  const moveCoinBy = (playerIdx, coinIdx, steps) => {
+    // For demo purposes, we maintain a simple numeric track position.
+    // Coins created by initialCoinsState have { position: 'yard' }.
+    // We will convert to { track: number | null } where null indicates yard.
     setCoins((prev) => {
       const next = structuredClone(prev);
-      const coin = next[playerIdx]?.coins?.[coinIdx];
+      const playerState = next[playerIdx];
+      if (!playerState) return prev;
+
+      // Ensure coin exists
+      let coin = playerState.coins?.[coinIdx];
       if (!coin) return prev;
-      const order = ['yard', 'start', 'mid'];
-      const i = order.indexOf(coin.position);
-      coin.position = order[(i + 1) % order.length];
+
+      // Normalize coin into track-based storage:
+      // - If coin.position === 'yard' or not using track yet -> treat as null (yard)
+      // - Otherwise if coin.track exists, use it
+      let currentTrack =
+        typeof coin.track === 'number'
+          ? coin.track
+          : coin.position === 'yard'
+            ? null
+            : null;
+
+      // If in yard and moving, bring onto the board (treat as 0 then add steps)
+      if (currentTrack === null) {
+        currentTrack = 0;
+      }
+      const newTrack = Math.max(0, currentTrack + steps);
+
+      // Store back in unified structure
+      coin = { track: newTrack };
+      playerState.coins[coinIdx] = coin;
+
       return next;
     });
   };
+
+  const onMoveCoin = (playerIdx, coinIdx) => {
+    // Only allow move if:
+    // - It is this player's turn
+    // - There is a pendingMove for this player (we already rolled)
+    if (playerIdx !== currentPlayer) return;
+    if (!pendingMove || pendingMove.playerIdx !== playerIdx) return;
+
+    // Execute move by the pending dice value
+    moveCoinBy(playerIdx, coinIdx, pendingMove.value);
+
+    // Clear pending move and advance turn
+    setPendingMove(null);
+    advanceTurn();
+  };
+
+  const currentDice = pendingMove?.playerIdx === currentPlayer
+    ? pendingMove.value
+    : diceValues[currentPlayer] ?? 1;
 
   return (
     <div className="App ludo-app">
@@ -89,7 +137,7 @@ function App() {
           players={players}
           currentPlayer={currentPlayer}
           onRoll={() => rollDice(currentPlayer)}
-          currentDiceValue={diceValues[currentPlayer] ?? 1}
+          currentDiceValue={currentDice}
         />
         <Board
           players={players}
