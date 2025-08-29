@@ -1,15 +1,16 @@
 import { defaultPlayers } from './utils';
+import { createInitialCoin } from './path';
 
 /**
- * Create initial demo coin state:
- * Each player has four coins with a simple 'position' field
- * ('yard' | 'start' | 'mid'), used just for demo toggles.
+ * Create initial coin state using path model:
+ * Each coin starts in { status: 'yard' } and progresses via path.js helpers.
  */
 
 // PUBLIC_INTERFACE
 export const initialCoinsState = (players = defaultPlayers) => {
   return players.map((p) => ({
     playerId: p.id,
-    coins: Array.from({ length: 4 }, () => ({ position: 'yard' })),
+    color: p.color,
+    coins: Array.from({ length: 4 }, () => createInitialCoin()),
   }));
 };

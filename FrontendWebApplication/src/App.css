@@ -191,6 +191,10 @@ body {
   position: relative;
   overflow: hidden;
 }
+.board .token {
+  /* Improve on-board token hit-area slightly */
+  padding: 2px;
+}
 
 /* Classic Ludo visual grid */
 .ludo-grid {

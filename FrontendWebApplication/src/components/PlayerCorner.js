@@ -4,6 +4,7 @@ import Token from './Token';
 
 /**
  * Corner area for each player containing name, tokens, and a clearly visible dice space.
+ * Shows tokens that are still in 'yard' here. Tokens on the board are rendered by Board.
  */
 
 // PUBLIC_INTERFACE
@@ -29,14 +30,28 @@ export default function PlayerCorner({
       </div>
 
       <div className="coins" role="group" aria-label={`${name} tokens`}>
-        {coins.map((coin, idx) => (
-          <Token
-            key={`${id}-coin-${idx}`}
-            color={color}
-            label={String(idx + 1)}
-            onActivate={() => onMoveCoin(id, idx)}
-          />
-        ))}
+        {coins.map((coin, idx) => {
+          const inYard = !coin || coin.status === 'yard';
+          if (!inYard) {
+            // Token is on board; not shown here (reserve slot for consistent layout)
+            return (
+              <div
+                key={`${id}-coin-${idx}`}
+                className="token"
+                style={{ visibility: 'hidden' }}
+                aria-hidden
+              />
+            );
+          }
+          return (
+            <Token
+              key={`${id}-coin-${idx}`}
+              color={color}
+              label={String(idx + 1)}
+              onActivate={() => onMoveCoin(id, idx)}
+            />
+          );
+        })}
       </div>
 
       <div className="actions">

@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { defaultPlayers, getThemeFromPrefers, nextPlayerIndex } from './lib/utils';
 import { initialCoinsState } from './lib/state';
+import { applyMove } from './lib/path';
 
 /**
  * LudoMaster – main application entry with local demo state.
@@ -71,39 +72,21 @@ function App() {
     setCurrentPlayer((idx) => nextPlayerIndex(idx, players.length));
   };
 
+  // Move coin using full path rules
   const moveCoinBy = (playerIdx, coinIdx, steps) => {
-    // For demo purposes, we maintain a simple numeric track position.
-    // Coins created by initialCoinsState have { position: 'yard' }.
-    // We will convert to { track: number | null } where null indicates yard.
     setCoins((prev) => {
       const next = structuredClone(prev);
       const playerState = next[playerIdx];
       if (!playerState) return prev;
 
-      // Ensure coin exists
-      let coin = playerState.coins?.[coinIdx];
-      if (!coin) return prev;
+      const color = playerState.color || players[playerIdx]?.color;
+      if (!color) return prev;
 
-      // Normalize coin into track-based storage:
-      // - If coin.position === 'yard' or not using track yet -> treat as null (yard)
-      // - Otherwise if coin.track exists, use it
-      let currentTrack =
-        typeof coin.track === 'number'
-          ? coin.track
-          : coin.position === 'yard'
-            ? null
-            : null;
+      const coin = playerState.coins?.[coinIdx];
+      if (coin == null) return prev;
 
-      // If in yard and moving, bring onto the board (treat as 0 then add steps)
-      if (currentTrack === null) {
-        currentTrack = 0;
-      }
-      const newTrack = Math.max(0, currentTrack + steps);
-
-      // Store back in unified structure
-      coin = { track: newTrack };
-      playerState.coins[coinIdx] = coin;
-
+      const updated = applyMove(color, coin, steps);
+      playerState.coins[coinIdx] = updated;
       return next;
     });
   };
