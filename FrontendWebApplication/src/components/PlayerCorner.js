@@ -3,7 +3,7 @@ import Dice from './Dice';
 import Token from './Token';
 
 /**
- * Corner area for each player containing name, tokens, and dice.
+ * Corner area for each player containing name, tokens, and a clearly visible dice space.
  */
 
 // PUBLIC_INTERFACE
@@ -40,7 +40,13 @@ export default function PlayerCorner({
       </div>
 
       <div className="actions">
-        <Dice value={diceValue} onRoll={() => onRoll(id)} disabled={!isActive} />
+        <div
+          className={`dice-slot dice-slot-${color}`}
+          aria-label={`${name} dice area`}
+          role="group"
+        >
+          <Dice value={diceValue} onRoll={() => onRoll(id)} disabled={!isActive} />
+        </div>
         <span className="pill" aria-live="polite">
           Dice: {diceValue}
         </span>
