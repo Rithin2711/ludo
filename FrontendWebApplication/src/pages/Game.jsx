@@ -35,7 +35,7 @@ export default function Game() {
   const { id } = useParams();
   const socket = useSocket();
   const { user } = useAuthStore();
-
+  const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [dice, setDice] = useState(1);
@@ -54,8 +54,25 @@ export default function Game() {
 
   useEffect(() => {
     if (!socket) return;
-    
-    // Auto-initialize game with bots
+
+    function onConnect() {
+      setConnected(true);
+      // Auto-initialize game with bots on connection
+      if (id === 'auto') {
+        socket.emit('room:create', {
+          type: 'bot',
+          botCount: 3,
+          autoStart: true
+        });
+      }
+    }
+
+    function onDisconnect() {
+      setConnected(false);
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
     if (id === 'auto') {
       socket.emit('room:create', {
         type: 'bot',

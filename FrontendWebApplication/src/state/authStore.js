@@ -7,7 +7,14 @@ const generateAnonymousId = () => Math.random().toString(36).substring(2, 15);
 // PUBLIC_INTERFACE
 export const useAuthStore = create(persist((set, get) => ({
   // Default anonymous user
-  user: { id: generateAnonymousId(), username: 'Player 1', isAnonymous: true },
+  user: { 
+    id: generateAnonymousId(), 
+    username: 'Player 1', 
+    isAnonymous: true,
+    avatarUrl: '',
+    bio: '',
+    rating: 1000
+  },
   token: 'anonymous-session',
   loading: false,
   error: null,
