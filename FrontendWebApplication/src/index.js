@@ -2,10 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { ApiProvider } from './services/api';
+import { SocketProvider } from './services/socket';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ApiProvider>
+      <SocketProvider>
+        <App />
+      </SocketProvider>
+    </ApiProvider>
   </React.StrictMode>
 );
