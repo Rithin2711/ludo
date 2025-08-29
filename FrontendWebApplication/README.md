@@ -1,82 +1,35 @@
-# Lightweight React Template for KAVIA
+# LudoMaster – React Frontend
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A modern, responsive, and accessible UI for a 2–4 player Ludo board. This step focuses purely on frontend structure, reusable components, and minimal demo logic for dice and coin interactions.
 
-## Features
+## Highlights
+- Dynamic Ludo board for 2–4 players with a corner for each active player
+- Dice component placed at each player's corner (click/Enter to roll on active turn)
+- Four tokens per player with color-coding (Green, Red, Blue, Yellow)
+- Responsive layout and theme toggle (light/dark, honors OS preference)
+- Accessibility: focus states, labels, keyboard support, color contrast
+- Clean component structure ready for future backend/socket integration
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+## Quick start
+- `npm start` – dev server
+- `npm test` – unit tests
+- `npm run build` – production build
 
-## Getting Started
+## Components
+- `src/components/Board.js` – Board layout with corner areas
+- `src/components/PlayerCorner.js` – Corner UI with player name, tokens, and dice
+- `src/components/Token.js` – Token (coin) with keyboard activation
+- `src/components/Dice.js` – Dice with value display and roll action
+- `src/components/ControlsBar.js` – Player count and current turn controls
+- `src/components/Header.js` and `src/components/Footer.js`
 
-In the project directory, you can run:
+## Demo interactions
+- Select 2–4 players with the dropdown.
+- Click "Roll Dice" or press Enter on dice for the current player to roll & advance turn.
+- Click a token (or press Enter) to cycle its position (demo only).
 
-### `npm start`
+## Future integration
+- Replace demo state in `App.js` with real game state from backend and WebSockets.
+- Implement real movement and path rules, safe squares, and home lanes.
+- Sync dice rolls and movements across players.
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
